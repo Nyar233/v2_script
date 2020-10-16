@@ -4,7 +4,7 @@ v2fly_folder="/usr/local/bin/v2ray"
 # 起始
 releasever=`awk -F= '/^VERSION_ID/{print $2}' /etc/os-release`
 basearch="x86_64"
-
+VERSION_CODENAME_script=`awk -F= '/^VERSION_CODENAME=/{print $2}' /etc/os-release`
 cat << EOF
 ********please enter your choise:(1-6)****
 (1) install v2ray.
@@ -135,8 +135,8 @@ install_nginx(){
 #        yum update -y
  #       yum install nginx -y
 #    elif [ "$os"=="debian"  ]; then
-        echo 'deb https://nginx.org/packages/debian/ buster nginx' >> /etc/apt/sources.list
-        echo 'deb-src https://nginx.org/packages/debian/ buster nginx' >> /etc/apt/sources.list
+        echo 'deb https://nginx.org/packages/debian/ $VERSION_CODENAME_script nginx' >> /etc/apt/sources.list
+        echo 'deb-src https://nginx.org/packages/debian/ $VERSION_CODENAME_script nginx' >> /etc/apt/sources.list
         apt update -y
         apt install nginx -y
 	
