@@ -21,13 +21,13 @@ read -p "Selected:" selected_by_user
 case $selected_by_user in
     1)
         echo "install v2ray..."
-	v2_install
-	echo "install v2ray: done."
+		v2_install
+		echo "install v2ray: done."
         ;;
     2)
 	    echo "install certbot..."
 	    certbot_install
-            echo "install certbot: done."
+        echo "install certbot: done."
 	;;
     3)
         echo "config Certbot..."
@@ -45,13 +45,13 @@ case $selected_by_user in
         echo "config tls: done"
         ;;
     6)
-	echo "exit."
-	exit
-	;;
+		echo "exit."
+		exit
+		;;
     *)
-	echo "error option."
-	echo "exit."
-	exit
+		echo "error option."
+		echo "exit."
+		exit
 esac
 }
 
