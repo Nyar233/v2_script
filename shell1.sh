@@ -10,7 +10,8 @@ cat << EOF
 (1) install v2ray.
 (2) install Certbot.
 (3) config Certbot.
-(4) install nginx
+(4) install nginx.
+(5) config tls for v2ray
 (6) Exit Menu.
 EOF
 
@@ -38,6 +39,11 @@ case $selected_by_user in
         install_nginx
         echo "install nginx: done."
         ;;
+    5)
+        echo "config tls"
+        config_tls
+        echo "config tls: done"
+        ;;
     6)
 	    echo "exit."
 	    exit
@@ -50,6 +56,32 @@ esac
 }
 
 
+config_tls(){
+    read -p "input your domain: " domain_tls
+    useradd -s /usr/sbin/nologin v2ray
+    install -d -o v2ray -g v2ray /etc/ssl/v2ray/
+    install -m 644 -o v2ray -g v2ray /etc/letsencrypt/live/$domain_tls/fullchain.pem -t /etc/ssl/v2ray/
+    install -m 600 -o v2ray -g v2ray /etc/letsencrypt/live/$domain_tls/privkey.pem -t /etc/ssl/v2ray/
+cat > /etc/letsencrypt/renewal-hooks/deploy/v2ray.sh<<EOF
+#!/bin/bash
+V2RAY_DOMAIN="$domain_tls"
+if [[ "$RENEWED_LINEAGE" == "/etc/letsencrypt/live/$V2RAY_DOMAIN"  ]]; then
+     install -m 644 -o v2ray -g v2ray "/etc/letsencrypt/live/$V2RAY_DOMAIN/fullchain.pem" -t /etc/ssl/v2ray/
+     install -m 600 -o v2ray -g v2ray "/etc/letsencrypt/live/$V2RAY_DOMAIN/privkey.pem" -t /etc/ssl/v2ray/
+     sleep "$((RANDOM % 2048))"
+     systemctl restart v2ray.service
+fi
+EOF
+
+chmod +x /etc/letsencrypt/renewal-hooks/deploy/v2ray.sh
+
+echo "done."
+echo '"certificateFile": "/etc/ssl/v2ray/fullchain.pem"'
+echo '"keyFile": "/etc/ssl/v2ray/privkey.pem"'
+echo "systemctl edit v2ray.service"
+echo "[Service]"
+echo "User=v2ray"
+}
 # install v2ray
 v2_install(){
     if [ -f "$filename"  ]; then
@@ -114,5 +146,3 @@ EOF
 
 
 main $@
-
-
