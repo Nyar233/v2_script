@@ -31,7 +31,7 @@ case $selected_by_user in
 	;;
     3)
         echo "config Certbot..."
-        config_cerbot
+        config_certbot
         echo "config Certbot: done."
         ;;
     4)
