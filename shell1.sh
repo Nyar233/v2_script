@@ -146,4 +146,4 @@ EOF
 
 
 
-main $@
+main
