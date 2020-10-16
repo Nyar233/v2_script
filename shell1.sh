@@ -10,9 +10,9 @@ cat << EOF
 recommend: 1->2->3->4->5
 (1) install v2ray.
 (2) install Certbot.
-(3) config Certbot.
+(3) configure Certbot.
 (4) install nginx.
-(5) config tls for v2ray
+(5) configure tls for v2ray
 (6) Exit Menu.
 EOF
 
