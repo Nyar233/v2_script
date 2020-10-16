@@ -116,6 +116,7 @@ config_certbot(){
     echo "done."
     systemctl start nginx
     systemctl start v2ray
+    mkdir /opt/certbot
     touch /opt/certbot/certbot-auto-renew-cron
     echo '15 2 * */2 * certbot renew --pre-hook "service nginx stop" --post-hook "service nginx start"' > /opt/certbot-auto-renew-cron
     crontab /opt/certbot/certbot-auto-renew-cron
