@@ -96,15 +96,16 @@ v2_install(){
 
 certbot_install(){
 
-	if [ "$os"=="CentOS" ]; then
+	if [ "$os"=="centos" ]; then
 		echo "install epel-release..."
 		yum install epel-release -y
 		echo "install certbot"
 		yum install certbot -y
 		echo "done."
-	elif [ "$os"=="Debian" ]; then
+	elif [ "$os"=="debian" ]; then
 		apt install certbot -y
 		echo "done"
+		
 	fi
 }
 
