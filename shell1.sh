@@ -1,6 +1,6 @@
 #!/bin/bash
 v2fly_folder="/usr/local/bin/v2ray"
-os=`awk -F= '/^ID=/{print $2}' /etc/os-release`
+# os=`awk -F= '/^ID=/{print $2}' /etc/os-release`
 # 起始
 releasever=`awk -F= '/^VERSION_ID/{print $2}' /etc/os-release`
 basearch="x86_64"
@@ -95,16 +95,16 @@ v2_install(){
 }
 
 certbot_install(){
-	if [ "$os"=="centos" ]; then
-		echo "install epel-release..."
-		yum install epel-release -y
-		echo "install certbot"
-		yum install certbot -y
-		echo "done."
-	elif [ "$os"=="debian" ]; then
+	#if [ "$os"=="centos" ]; then
+	#	echo "install epel-release..."
+	#	yum install epel-release -y
+	#	echo "install certbot"
+	#	yum install certbot -y
+	#	echo "done."
+	#elif [ "$os"=="debian" ]; then
 		apt install certbot -y
 		echo "done"
-	fi
+	#fi
 	}
 
 
@@ -123,24 +123,23 @@ config_certbot(){
     }
 
 install_nginx(){
-    if [ "$os"=="centos"  ]; then
-cat>"/etc/yum.repos.d/nginx.repo"<<EOF
-[nginx]
-name=nginx repo
-baseurl=https://nginx.org/packages/centos/$releasever/$basearch/
-gpgcheck=0
-enabled=1
-EOF
-
-        yum update -y
-        yum install nginx -y
-    elif [ "$os"=="debian"  ]; then
+   # if [ "$os"=="centos"  ]; then
+#cat>"/etc/yum.repos.d/nginx.repo"<<EOF
+#[nginx]
+#name=nginx repo
+#baseurl=https://nginx.org/packages/centos/$releasever/$basearch/
+#gpgcheck=0
+#enabled=1
+#EOF
+#        yum update -y
+ #       yum install nginx -y
+#    elif [ "$os"=="debian"  ]; then
         echo 'deb https://nginx.org/packages/debian/ buster nginx' >> /etc/apt/sources.list
         echo 'deb-src https://nginx.org/packages/debian/ buster nginx' >> /etc/apt/sources.list
         apt update -y
         apt install nginx -y
 	
-    fi
+ #   fi
 }
 
 
