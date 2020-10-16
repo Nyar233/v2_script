@@ -95,7 +95,6 @@ v2_install(){
 }
 
 certbot_install(){
-
 	if [ "$os"=="centos" ]; then
 		echo "install epel-release..."
 		yum install epel-release -y
@@ -105,9 +104,8 @@ certbot_install(){
 	elif [ "$os"=="debian" ]; then
 		apt install certbot -y
 		echo "done"
-		
 	fi
-}
+	}
 
 
 config_certbot(){
@@ -122,10 +120,10 @@ config_certbot(){
     echo '15 2 * */2 * certbot renew --pre-hook "service nginx stop" --post-hook "service nginx start"' > /opt/certbot-auto-renew-cron
     crontab /opt/certbot/certbot-auto-renew-cron
     echo "done"
-}
+    }
 
 install_nginx(){
-    if [ "$os"=="CentOS Linux"  ]; then
+    if [ "$os"=="centos"  ]; then
 cat>"/etc/yum.repos.d/nginx.repo"<<EOF
 [nginx]
 name=nginx repo
@@ -136,11 +134,12 @@ EOF
 
         yum update -y
         yum install nginx -y
-    elif [ "$os"=="Debian GNU/Linux"  ]; then
+    elif [ "$os"=="debian"  ]; then
         echo 'deb https://nginx.org/packages/debian/ buster nginx' >> /etc/apt/sources.list
         echo 'deb-src https://nginx.org/packages/debian/ buster nginx' >> /etc/apt/sources.list
         apt update -y
         apt install nginx -y
+	
     fi
 }
 
