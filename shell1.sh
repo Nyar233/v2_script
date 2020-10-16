@@ -1,6 +1,6 @@
 #!/bin/bash
 v2fly_folder="/usr/local/bin/v2ray"
-os=`awk -F= '/^NAME/{print $2}' /etc/os-release`
+os=`awk -F= '/^ID=/{print $2}' /etc/os-release`
 # 起始
 releasever=`awk -F= '/^VERSION_ID/{print $2}' /etc/os-release`
 basearch="x86_64"
@@ -96,13 +96,13 @@ v2_install(){
 
 certbot_install(){
 
-	if [ "$os"=="CentOS Linux" ]; then
+	if [ "$os"=="CentOS" ]; then
 		echo "install epel-release..."
 		yum install epel-release -y
 		echo "install certbot"
 		yum install certbot -y
 		echo "done."
-	elif [ "$os"=="Debian GNU/Linux" ]; then
+	elif [ "$os"=="Debian" ]; then
 		apt install certbot -y
 		echo "done"
 	fi
