@@ -70,6 +70,9 @@ esac
 
 
 configure_v2ray(){
+    read -p "input your vless_ws path:" path_ws_vless
+    read -p "input your vmess_tcp path:" path_tcp_vmess
+    read -p "input your vmess_ws path:" path_ws_vmess
     useradd -s /usr/sbin/nologin v2ray
     install -d -o v2ray -g v2ray /etc/ssl/v2ray/
     install -m 644 -o v2ray -g v2ray /etc/letsencrypt/live/$DOMAIN_V2/fullchain.pem -t /etc/ssl/v2ray/
@@ -111,17 +114,17 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
                         "dest": 80 // 或者回落到其它也防探测的代理
                     },
                     {
-                        "path": "/vlws", // 必须换成自定义的 PATH
+                        "path": "/$path_ws_vless", // 必须换成自定义的 PATH
                         "dest": 1234,
                         "xver": 1
                     },
                     {
-                        "path": "/vmtcp", // 必须换成自定义的 PATH
+                        "path": "/$path_tcp_vmess", // 必须换成自定义的 PATH
                         "dest": 2345,
                         "xver": 1
                     },
                     {
-                        "path": "/vmws", // 必须换成自定义的 PATH
+                        "path": "/$path_ws_vmess", // 必须换成自定义的 PATH
                         "dest": 3456,
                         "xver": 1
                     }
@@ -162,7 +165,7 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
                 "security": "none",
                 "wsSettings": {
                     "acceptProxyProtocol": true, // 提醒：若你用 Nginx/Caddy 等反代 WS，需要删掉这行
-                    "path": "/vlws" // 必须换成自定义的 PATH，需要和分流的一致
+                    "path": "/$path_ws_vless" // 必须换成自定义的 PATH，需要和分流的一致
                 }
             }
         },
@@ -188,7 +191,7 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
                         "type": "http",
                         "request": {
                             "path": [
-                                "/vmtcp" // 必须换成自定义的 PATH，需要和分流的一致
+                                "/$path_tcp_vmess" // 必须换成自定义的 PATH，需要和分流的一致
                             ]
                         }
                     }
@@ -213,7 +216,7 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
                 "security": "none",
                 "wsSettings": {
                     "acceptProxyProtocol": true, // 提醒：若你用 Nginx/Caddy 等反代 WS，需要删掉这行
-                    "path": "/vmws" // 必须换成自定义的 PATH，需要和分流的一致
+                    "path": "/$path_ws_vmess" // 必须换成自定义的 PATH，需要和分流的一致
                 }
             }
         }
@@ -236,12 +239,12 @@ echo "address:$DOMAIN_V2"
 echo 'port:443'
 echo "UUID:$UUID_V2"
 echo 'flow:xtls-rprx-direct'
-echo 'path:
+echo "path:
 vless+tcp: /
-vless+ws: /vlws
-vmess+ws: /vmws
-vmess+tcp: /vmtcp   type:http
-'
+vless+ws: /$path_ws_vless
+vmess+tcp: /$path_tcp_vmess   type:http
+vmess+ws: /$path_ws_vmess
+"
 }
 
 
