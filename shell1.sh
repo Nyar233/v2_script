@@ -256,7 +256,7 @@ v2_install(){
         touch $HOME/v2_source.file
         echo "[Service]" >> $HOME/v2_source.file
         echo "User=v2ray" >> $HOME/v2_source.file
-        env SYSTEMD_EDITOR="mv $HOME/source.file" systemctl edit v2ray
+        env SYSTEMD_EDITOR="mv $HOME/v2_source.file" systemctl edit v2ray
         systemctl restart v2ray
     fi
 }
