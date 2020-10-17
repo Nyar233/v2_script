@@ -240,7 +240,7 @@ echo 'path:
 vless+tcp: /
 vless+ws: /vlws
 vmess+ws: /vmws
-vmess+tcp: /vmtcp
+vmess+tcp: /vmtcp   type:http
 '
 }
 
