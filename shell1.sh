@@ -60,7 +60,6 @@ case $selected_by_user in
 		echo "error option."
 		echo "exit."
 		exit
-        ;;
 esac
 }
 
