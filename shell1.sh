@@ -13,8 +13,10 @@ recommend: 1->2->3->4->5
 (3) configure Certbot.
 (4) install nginx.
 (5) configure tls for v2ray
-(6) Exit Menu.
+(6) install and configure all
+(7) Exit Menu.
 EOF
+
 
 
 main(){
@@ -46,6 +48,10 @@ case $selected_by_user in
         echo "config tls: done"
         ;;
     6)
+        echo "install and configure all"
+        install_all
+        echo "done"
+    7)
 		echo "exit."
 		exit
 		;;
@@ -241,6 +247,10 @@ vmess+tcp /vmtcp
 
 
 }
+
+
+
+
 # install v2ray
 v2_install(){
     if [ -f "$filename"  ]; then
@@ -250,6 +260,11 @@ v2_install(){
         echo "v2ray is install..."
         bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
         echo "v2ray has installed."
+        touch $HOME/v2_source.file
+        echo "[Service]" >> $HOME/v2_source.file
+        echo "User=v2ray" >> $HOME/v2_source.file
+        env SYSTEMD_EDITOR="mv $HOME/source.file" systemctl edit v2ray
+        systemctl restart v2ray
     fi
 }
 
@@ -300,6 +315,15 @@ install_nginx(){
         apt install nginx -y
 	
  #   fi
+}
+
+# 整合
+install_all() {
+    v2_install
+    install_nginx
+    certbot_install
+    config_certbot
+    config_tls
 }
 
 
