@@ -319,6 +319,8 @@ install_nginx(){
 
 # 整合
 install_all() {
+    apt update -y
+    apt upgrade -y
     v2_install
     install_nginx
     certbot_install
