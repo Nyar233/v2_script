@@ -256,7 +256,9 @@ v2ray_install(){
         echo "v2ray had installed."
         read -p "update or not? (y/n): " update_or_not
         if [ "$update_or_not" = "y" ]; then
+            echo "update..."
             bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+            echo "update done."
         else
         echo "exit."
         exit
