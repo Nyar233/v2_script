@@ -40,7 +40,7 @@ case $selected_by_user in
         ;;
     4)
         echo "install nginx..."
-        install_nginx
+        nginx_install
         echo "install nginx: done."
         ;;
     5)
@@ -249,7 +249,7 @@ vmess+tcp /vmtcp
 
 # install v2ray
 v2ray_install(){
-    if [ -f "$filename"  ]; then
+    if [ -f "$v2fly_folder"  ]; then
         echo "v2ray had installed."
 
     else
@@ -284,7 +284,7 @@ certbot_install(){
 configure_certbot(){
     systemctl stop nginx
     systemctl stop v2ray
-    certbot certonly --standalone -
+    certbot certonly --standalone -d $DOMAIN_V2
     echo "done."
     systemctl start nginx
     systemctl start v2ray
@@ -296,7 +296,7 @@ configure_certbot(){
     }
 
 
-install_nginx(){
+nginx_install(){
    # if [ "$os"=="centos"  ]; then
 #cat>"/etc/yum.repos.d/nginx.repo"<<EOF
 #[nginx]
@@ -315,9 +315,11 @@ install_nginx(){
         else
         echo '' > /etc/apt/sources.list.d/nginx.list
         fi
+
         echo "deb https://nginx.org/packages/debian/ $VERSION_CODENAME_script nginx" >> /etc/apt/sources.list.d/nginx.list
         echo "deb-src https://nginx.org/packages/debian/ $VERSION_CODENAME_script nginx" >> /etc/apt/sources.list.d/nginx.list
         wget http://nginx.org/keys/nginx_signing.key && apt-key add nginx_signing.key
+        apt install apt-transport-https -y
         apt update -y
         apt install nginx -y
         systemctl enable nginx
@@ -331,7 +333,7 @@ install_and_configure_all() {
     apt upgrade -y
     apt install sudo -y
     v2ray_install
-    install_nginx
+    nginx_install
     certbot_install
     configure_certbot
     configure_v2ray
