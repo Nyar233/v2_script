@@ -6,7 +6,7 @@ releasever=`awk -F= '/^VERSION_ID/{print $2}' /etc/os-release`
 basearch="x86_64"
 VERSION_CODENAME_script=`awk -F= '/^VERSION_CODENAME=/{print $2}' /etc/os-release`
 cat << EOF
-********please enter your choise:(1-6)****
+********please enter your choise:(1-7)****
 recommend: 1->2->3->4->5
 (1) install/update v2ray.
 (2) install Certbot.
