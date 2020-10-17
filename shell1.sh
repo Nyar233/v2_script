@@ -8,7 +8,7 @@ VERSION_CODENAME_script=`awk -F= '/^VERSION_CODENAME=/{print $2}' /etc/os-releas
 cat << EOF
 ********please enter your choise:(1-6)****
 recommend: 1->2->3->4->5
-(1) install v2ray.
+(1) install/update v2ray.
 (2) install Certbot.
 (3) configure Certbot.
 (4) install nginx.
@@ -254,7 +254,13 @@ vmess+ws: /$path_ws_vmess
 v2ray_install(){
     if [ -f "$v2fly_folder"  ]; then
         echo "v2ray had installed."
-
+        read -p "update or not? (y/n): " update_or_not
+        if [ "$update_or_not" = "y" ]; then
+            bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+        else
+        echo "exit."
+        exit
+        fi
     else
         echo "v2ray is install..."
         bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
