@@ -270,6 +270,8 @@ certbot_install(){
 	#	echo "done."
 	#elif [ "$os"=="debian" ]; then
 		apt install certbot -y
+        # systemctl enable certbot
+        # systemctl start certbot
 		echo "done"
 	#fi
 	}
@@ -302,11 +304,20 @@ install_nginx(){
 #        yum update -y
  #       yum install nginx -y
 #    elif [ "$os"=="debian"  ]; then
-        echo 'deb https://nginx.org/packages/debian/ $VERSION_CODENAME_script nginx' >> /etc/apt/sources.list
-        echo 'deb-src https://nginx.org/packages/debian/ $VERSION_CODENAME_script nginx' >> /etc/apt/sources.list
+        #echo deb http://nginx.org/packages/debian/ stretch nginx | sudo tee /etc/apt/sources.list.d/nginx.list
+        file=/etc/apt/sources.list.d/nginx.list
+        if [ ! -f "$file" ]; then
+        touch /etc/apt/sources.list.d/nginx.list
+        else
+        echo '' > /etc/apt/sources.list.d/nginx.list
+        fi
+        echo "deb https://nginx.org/packages/debian/ $VERSION_CODENAME_script nginx" >> /etc/apt/sources.list.d/nginx.list
+        echo "deb-src https://nginx.org/packages/debian/ $VERSION_CODENAME_script nginx" >> /etc/apt/sources.list.d/nginx.list
+        wget http://nginx.org/keys/nginx_signing.key && apt-key add nginx_signing.key
         apt update -y
         apt install nginx -y
-	
+        systemctl enable nginx
+        systemctl start nginx
  #   fi
 }
 
@@ -314,6 +325,7 @@ install_nginx(){
 install_all() {
     apt update -y
     apt upgrade -y
+    apt install sudo -y
     v2_install
     install_nginx
     certbot_install
