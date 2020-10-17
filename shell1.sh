@@ -227,17 +227,11 @@ systemctl restart v2ray
 echo "done."
 echo '"certificateFile": "/etc/ssl/v2ray/fullchain.pem"'
 echo '"keyFile": "/etc/ssl/v2ray/privkey.pem"'
-echo '---------------------------------------------'
-echo "do it by yourself:"
-echo "systemctl edit v2ray.service"
-echo "[Service]"
-echo "User=v2ray"
-echo "systemctl restart v2ray"
-
-echo '--------------information--------------------'
-echo 'address:$domain_tls'
+echo '--------------v2ray_information--------------------'
+echo ''
+echo "address:$domain_tls"
 echo 'port:443'
-echo 'UUID:$UUID_v2'
+echo "UUID:$UUID_v2"
 echo 'flow:xtls-rprx-direct'
 echo 'path:
 vless+tcp /
@@ -245,8 +239,6 @@ vless+ws /vlws
 vmess+ws /vmws
 vmess+tcp /vmtcp
 '
-
-
 }
 
 
