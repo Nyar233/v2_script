@@ -24,7 +24,7 @@ read -p "Selected:" selected_by_user
 case $selected_by_user in
     1)
         echo "install v2ray..."
-		v2_install
+		v2ray_install
 		echo "install v2ray: done."
         ;;
     2)
@@ -33,8 +33,9 @@ case $selected_by_user in
         echo "install certbot: done."
 	;;
     3)
+        read -p "input your domain: " DOMAIN_V2
         echo "config Certbot..."
-        config_certbot
+        configure_certbot
         echo "config Certbot: done."
         ;;
     4)
@@ -43,13 +44,17 @@ case $selected_by_user in
         echo "install nginx: done."
         ;;
     5)
-        echo "config tls"
-        config_tls
-        echo "config tls: done"
+        echo "configure v2ray"
+        read -p "input your DOMAIN: " DOMAIN_V2
+        read -p "input your UUID: " UUID_V2
+        configure_v2ray
+        echo "configure v2ray: done"
         ;;
     6)
         echo "install and configure all"
-        install_all
+        read -p "input your DOMAIN: " DOMAIN_V2
+        read -p "input your UUID: " UUID_V2
+        install_and_configure_all
         echo "done"
         ;;
     7)
@@ -64,16 +69,14 @@ esac
 }
 
 
-config_tls(){
-    read -p "input your domain: " domain_tls
-    read -p "input your UUID: " UUID_v2
+configure_v2ray(){
     useradd -s /usr/sbin/nologin v2ray
     install -d -o v2ray -g v2ray /etc/ssl/v2ray/
-    install -m 644 -o v2ray -g v2ray /etc/letsencrypt/live/$domain_tls/fullchain.pem -t /etc/ssl/v2ray/
-    install -m 600 -o v2ray -g v2ray /etc/letsencrypt/live/$domain_tls/privkey.pem -t /etc/ssl/v2ray/
+    install -m 644 -o v2ray -g v2ray /etc/letsencrypt/live/$DOMAIN_V2/fullchain.pem -t /etc/ssl/v2ray/
+    install -m 600 -o v2ray -g v2ray /etc/letsencrypt/live/$DOMAIN_V2/privkey.pem -t /etc/ssl/v2ray/
 cat > /etc/letsencrypt/renewal-hooks/deploy/v2ray.sh<<EOF
 #!/bin/bash
-V2RAY_DOMAIN="$domain_tls"
+V2RAY_DOMAIN="$DOMAIN_V2"
 if [[ "$RENEWED_LINEAGE" == "/etc/letsencrypt/live/$V2RAY_DOMAIN"  ]]; then
      install -m 644 -o v2ray -g v2ray "/etc/letsencrypt/live/$V2RAY_DOMAIN/fullchain.pem" -t /etc/ssl/v2ray/
      install -m 600 -o v2ray -g v2ray "/etc/letsencrypt/live/$V2RAY_DOMAIN/privkey.pem" -t /etc/ssl/v2ray/
@@ -96,7 +99,7 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
             "settings": {
                 "clients": [
                     {
-                        "id": "$UUID_v2", // 填写你的 UUID
+                        "id": "$UUID_V2", // 填写你的 UUID
                         "flow": "xtls-rprx-direct",
                         "level": 0,
                         "email": "love@v2fly.org"
@@ -147,7 +150,7 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
             "settings": {
                 "clients": [
                     {
-                        "id": "$UUID_v2", // 填写你的 UUID
+                        "id": "$UUID_V2", // 填写你的 UUID
                         "level": 0,
                         "email": "love@v2fly.org"
                     }
@@ -170,7 +173,7 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
             "settings": {
                 "clients": [
                     {
-                        "id": "$UUID_v2", // 填写你的 UUID
+                        "id": "$UUID_V2", // 填写你的 UUID
                         "level": 0,
                         "email": "love@v2fly.org"
                     }
@@ -199,7 +202,7 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
             "settings": {
                 "clients": [
                     {
-                        "id": "$UUID_v2", // 填写你的 UUID
+                        "id": "$UUID_V2", // 填写你的 UUID
                         "level": 0,
                         "email": "love@v2fly.org"
                     }
@@ -229,9 +232,9 @@ echo '"certificateFile": "/etc/ssl/v2ray/fullchain.pem"'
 echo '"keyFile": "/etc/ssl/v2ray/privkey.pem"'
 echo '--------------v2ray_information--------------------'
 echo ''
-echo "address:$domain_tls"
+echo "address:$DOMAIN_V2"
 echo 'port:443'
-echo "UUID:$UUID_v2"
+echo "UUID:$UUID_V2"
 echo 'flow:xtls-rprx-direct'
 echo 'path:
 vless+tcp /
@@ -245,7 +248,7 @@ vmess+tcp /vmtcp
 
 
 # install v2ray
-v2_install(){
+v2ray_install(){
     if [ -f "$filename"  ]; then
         echo "v2ray had installed."
 
@@ -278,11 +281,10 @@ certbot_install(){
 	}
 
 
-config_certbot(){
-    read -p "Please input your domain: " domain_user
+configure_certbot(){
     systemctl stop nginx
     systemctl stop v2ray
-    certbot certonly --standalone -d $domain_user
+    certbot certonly --standalone -
     echo "done."
     systemctl start nginx
     systemctl start v2ray
@@ -292,6 +294,7 @@ config_certbot(){
     crontab /opt/certbot/certbot-auto-renew-cron
     echo "done"
     }
+
 
 install_nginx(){
    # if [ "$os"=="centos"  ]; then
@@ -323,15 +326,15 @@ install_nginx(){
 }
 
 # 整合
-install_all() {
+install_and_configure_all() {
     apt update -y
     apt upgrade -y
     apt install sudo -y
-    v2_install
+    v2ray_install
     install_nginx
     certbot_install
-    config_certbot
-    config_tls
+    configure_certbot
+    configure_v2ray
 }
 
 
