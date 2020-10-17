@@ -237,10 +237,10 @@ echo 'port:443'
 echo "UUID:$UUID_V2"
 echo 'flow:xtls-rprx-direct'
 echo 'path:
-vless+tcp /
-vless+ws /vlws
-vmess+ws /vmws
-vmess+tcp /vmtcp
+vless+tcp: /
+vless+ws: /vlws
+vmess+ws: /vmws
+vmess+tcp: /vmtcp
 '
 }
 
@@ -290,7 +290,7 @@ configure_certbot(){
     systemctl start v2ray
     mkdir /opt/certbot
     touch /opt/certbot/certbot-auto-renew-cron
-    echo '15 2 * */2 * certbot renew --pre-hook "service nginx stop" --post-hook "service nginx start"' > /opt/certbot/certbot-auto-renew-cron
+    echo '12 18 * */2 * certbot renew --pre-hook "service nginx stop" --post-hook "service nginx start"' > /opt/certbot/certbot-auto-renew-cron
     crontab /opt/certbot/certbot-auto-renew-cron
     echo "done"
     }
