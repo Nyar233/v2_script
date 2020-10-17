@@ -51,6 +51,7 @@ case $selected_by_user in
         echo "install and configure all"
         install_all
         echo "done"
+        ;;
     7)
 		echo "exit."
 		exit
