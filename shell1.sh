@@ -333,9 +333,9 @@ nginx_install(){
         echo "deb https://nginx.org/packages/debian/ $VERSION_CODENAME_script nginx" >> /etc/apt/sources.list.d/nginx.list
         echo "deb-src https://nginx.org/packages/debian/ $VERSION_CODENAME_script nginx" >> /etc/apt/sources.list.d/nginx.list
         wget http://nginx.org/keys/nginx_signing.key && apt-key add nginx_signing.key
+        apt update -y
         apt install apt-transport-https -y
         apt install gnupg -y
-        apt update -y
         apt install nginx -y
         systemctl enable nginx
         systemctl start nginx
