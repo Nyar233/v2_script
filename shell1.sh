@@ -70,9 +70,9 @@ esac
 
 
 configure_v2ray(){
-    read -p "input your vless_ws path:" path_ws_vless
-    read -p "input your vmess_tcp path:" path_tcp_vmess
-    read -p "input your vmess_ws path:" path_ws_vmess
+    read -p "input your vless_ws path:/" path_ws_vless
+    read -p "input your vmess_tcp path:/" path_tcp_vmess
+    read -p "input your vmess_ws path:/" path_ws_vmess
     useradd -s /usr/sbin/nologin v2ray
     install -d -o v2ray -g v2ray /etc/ssl/v2ray/
     install -m 644 -o v2ray -g v2ray /etc/letsencrypt/live/$DOMAIN_V2/fullchain.pem -t /etc/ssl/v2ray/
@@ -258,6 +258,8 @@ v2ray_install(){
         if [ "$update_or_not" = "y" ]; then
             echo "update..."
             bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+            systemctl enable v2ray
+            systemctl start v2ray
             echo "update done."
         else
         echo "exit."
@@ -271,6 +273,7 @@ v2ray_install(){
         echo "[Service]" >> $HOME/v2_source.file
         echo "User=v2ray" >> $HOME/v2_source.file
         env SYSTEMD_EDITOR="mv $HOME/v2_source.file" systemctl edit v2ray
+        systemctl enable v2ray
         systemctl restart v2ray
     fi
 }
@@ -331,6 +334,7 @@ nginx_install(){
         echo "deb-src https://nginx.org/packages/debian/ $VERSION_CODENAME_script nginx" >> /etc/apt/sources.list.d/nginx.list
         wget http://nginx.org/keys/nginx_signing.key && apt-key add nginx_signing.key
         apt install apt-transport-https -y
+        apt install gnupg -y
         apt update -y
         apt install nginx -y
         systemctl enable nginx
