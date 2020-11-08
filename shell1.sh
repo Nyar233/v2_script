@@ -266,7 +266,7 @@ v2ray_install(){
         exit
         fi
     else
-        echo "v2ray is install..."
+        echo "v2ray is installing..."
         bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
         echo "v2ray has installed."
         touch $HOME/v2_source.file
