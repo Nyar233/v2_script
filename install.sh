@@ -268,6 +268,7 @@ echo 'port:443'
 echo "UUID:$UUID_V2"
 echo 'flow:xtls-rprx-direct'
 echo "path:
+Trojan: /
 vless+tcp: /
 vless+ws: /$path_ws_vless
 vmess+tcp: /$path_tcp_vmess   type:http
