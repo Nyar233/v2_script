@@ -47,6 +47,7 @@ case $selected_by_user in
         echo "configure v2ray"
         read -p "input your DOMAIN: " DOMAIN_V2
         read -p "input your UUID: " UUID_V2
+        read -p "input your password for trajon: " password_trojan
         configure_v2ray
         echo "configure v2ray: done"
         ;;
@@ -111,7 +112,8 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
                 "decryption": "none",
                 "fallbacks": [
                     {
-                        "dest": 80 // 或者回落到其它也防探测的代理
+                        "dest": 1310, // 默认回落到 V2Ray 的 Trojan 协议
+                        "xver": 1
                     },
                     {
                         "path": "/$path_ws_vless", // 必须换成自定义的 PATH
@@ -143,6 +145,32 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
                             "keyFile": "/etc/ssl/v2ray/privkey.pem" // 换成你的私钥，绝对路径
                         }
                     ]
+                }
+            }
+        },
+        {
+            "port": 1310,
+            "listen": "127.0.0.1",
+            "protocol": "trojan",
+            "settings": {
+                "clients": [
+                    {
+                        "password": "$password_trojan", // 填写你的密码
+                        "level": 0,
+                        "email": "love@v2fly.org"
+                    }
+                ],
+                "fallbacks": [
+                    {
+                        "dest": 80 // 或者回落到其它也防探测的代理
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "none",
+                "tcpSettings": {
+                    "acceptProxyProtocol": true
                 }
             }
         },
