@@ -134,7 +134,7 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
             "streamSettings": {
                 "network": "tcp",
                 "security": "tls",
-                "xtlsSettings": {
+                "tlsSettings": {
                     "alpn": [
                         "http/1.1"
                     ],
@@ -265,7 +265,6 @@ echo ''
 echo "address:$DOMAIN_V2"
 echo 'port:443'
 echo "UUID:$UUID_V2"
-echo 'flow:xtls-rprx-direct'
 echo "path:
 Trojan: /
 vless+tcp: /
