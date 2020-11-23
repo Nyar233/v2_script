@@ -104,7 +104,6 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
                 "clients": [
                     {
                         "id": "$UUID_V2", // 填写你的 UUID
-                        "flow": "xtls-rprx-direct",
                         "level": 0,
                         "email": "love@v2fly.org"
                     }
@@ -134,7 +133,7 @@ cat > /usr/local/etc/v2ray/config.json <<EOF
             },
             "streamSettings": {
                 "network": "tcp",
-                "security": "xtls",
+                "security": "tls",
                 "xtlsSettings": {
                     "alpn": [
                         "http/1.1"
